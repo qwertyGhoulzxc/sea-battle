@@ -33,7 +33,7 @@ class Ship():
 
 		for dx, dy in directions:
 			nx, ny = x + dx, y + dy
-			if 0 <= nx <= len(self.boardField[0]) and 0 <= ny < len(self.boardField):
+			if 0 <= nx < len(self.boardField[0]) and 0 <= ny < len(self.boardField):
 				if self.boardField[ny][nx] == BoardState.NO_SHIP.value or self.boardField[ny][nx] == BoardState.AREA_AROUND_SHIP.value:
 					self.board.set_cell(nx,ny,BoardState.AREA_AROUND_SHIP.value)
 					self.areaAroundShip.append([nx,ny])
@@ -44,6 +44,7 @@ class Ship():
 		if len(self.ship_coords) ==0:
 			for x,y in self.areaAroundShip:
 				self.board.set_cell(x,y,BoardState.MISS.value)
+			self.board.removeShip(self)
 
 
 	def is_on_position(self,x,y):
