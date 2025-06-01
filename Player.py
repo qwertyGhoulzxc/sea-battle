@@ -8,6 +8,9 @@ class Player:
 		self.score = 0
 		self.ship_sizes = [4, 3, 3, 2, 2, 2, 1, 1, 1, 1]
 
+	def set_name(self,name):
+		self.name = name
+
 	def clearBoard(self):
 		self.board.clearBoard()
 		self.ship_sizes = [4, 3, 3, 2, 2, 2, 1, 1, 1, 1]
@@ -20,7 +23,9 @@ class Player:
 			print('error')
 			return False
 		self.ship_sizes.remove(len(coords))
-		Ship(self.board,coords)
+		ship = Ship(len(coords))
+		ship.place
+
 		return False
 	
 	def getBoard(self):
