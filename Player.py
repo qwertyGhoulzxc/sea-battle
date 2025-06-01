@@ -35,8 +35,4 @@ class Player:
 		return self.board.getAttacked(coords[0],coords[1])
 
 	def isGameOver(self):
-		return self.board.getShips() == 0;
-	
-
-
-# score 
+		return len(self.board.ships_list) == 0

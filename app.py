@@ -1,5 +1,6 @@
 import pygame
 
+from screens.Game import GameScreen
 from screens.PlaceShips import PlaceShips
 from screens.Menu import HomeScreen
 from Enums import Screens
@@ -17,7 +18,8 @@ game = Game()
 screens = {
     Screens.MENU.value: HomeScreen(screen_width, screen_height),
     Screens.PLACE_SHIPS_1.value: PlaceShips(screen_width, screen_height,game,1),
-    Screens.PLACE_SHIPS_2.value: PlaceShips(screen_width, screen_height,game,2)
+    Screens.PLACE_SHIPS_2.value: PlaceShips(screen_width, screen_height,game,2),
+    Screens.GAME.value : GameScreen(screen_width, screen_height,game)
 }
 
 current_screen = Screens.MENU.value

@@ -171,8 +171,45 @@ class Board(pygame.sprite.Sprite):
 			if ship.is_on_position(x, y):
 				ship.getAttacked(x, y)
 				return True
+		if self.board[y][x] == BoardState.MISS.value:
+			return True
 		self.set_cell(x, y, BoardState.MISS.value)
 		return False
+
+	def draw_game_board(self,surface, player_number):
+		self.offset_x = Constants.OFFSET.value if player_number == 1 else (Constants.OFFSET.value +
+																		   self.grid_size * self.cell_size +100)
+		self.grid_cells = self._generate_cells()
+		for i, cell in enumerate(self.grid_cells):
+			y = i // self.grid_size  # индекс строки
+			x = i % self.grid_size
+			pygame.draw.rect(surface, Colors.GRAY.value, cell, 1)
+			if self.board[y][x] == BoardState.MISS.value:
+				pygame.draw.circle(surface, Colors.WHITE.value, (cell.x+self.cell_size/2,cell.y+self.cell_size/2), 7)
+			if self.board[y][x] == BoardState.HIT_SHIP.value:
+				size = 20
+				pygame.draw.line(surface, Colors.CORAL.value, (cell.x+7.5, cell.y+7.5), (cell.x + size+7.5, cell.y + size+7.5), 6)  # \
+				pygame.draw.line(surface, Colors.CORAL.value, (cell.x+7.5 + size, cell.y+7.5), (cell.x+7.5, cell.y + size+7.5), 6)
+
+
+	def handle_game_event(self, event):
+		if event.type == pygame.MOUSEBUTTONDOWN:
+			if event.button == 1:
+				mouse_x, mouse_y = event.pos
+
+				# Учитываем смещение для этого игрока
+				grid_x = (mouse_x - self.offset_x) // self.cell_size
+				grid_y = (mouse_y - Constants.OFFSET.value) // self.cell_size
+
+				# Проверяем, не вышел ли клик за пределы доски
+				if 0 <= grid_x < self.grid_size and 0 <= grid_y < self.grid_size:
+					print(f"Нажата клетка: ({grid_x}, {grid_y})")
+					return [grid_x,grid_y]
+				else:
+					return []
+
+
+
 
 	def printBoard(self):
 		for row in self.board:

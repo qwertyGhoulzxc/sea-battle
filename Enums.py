@@ -17,6 +17,7 @@ class Colors(Enum):
 	BLUE = (0, 0, 255)
 	BLACK = (0, 0, 0)
 	WHITE = (255, 255, 255)
+	CORAL = (245, 122, 138)
 	GRAY = (194, 194, 194)
 	GREEN = (0, 255, 0)
 
