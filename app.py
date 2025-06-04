@@ -11,7 +11,7 @@ pygame.init()
 pygame.mixer.init()
 
 pygame.mixer.music.load("./assets/music.mp3")
-pygame.mixer.music.play(-1)
+
 screen_width = 1000
 screen_height = 600
 
@@ -21,8 +21,8 @@ pygame.display.set_caption("Sea Battle")
 game = Game()
 
 screens = {
-    Screens.MENU.value: HomeScreen(screen_width, screen_height),
     Screens.PLACE_SHIPS_1.value: PlaceShips(screen_width, screen_height,game,1),
+    Screens.MENU.value: HomeScreen(screen_width, screen_height),
     Screens.PLACE_SHIPS_2.value: PlaceShips(screen_width, screen_height,game,2),
     Screens.GAME.value : GameScreen(screen_width, screen_height,game)
 }
@@ -30,7 +30,7 @@ screens = {
 current_screen = Screens.MENU.value
 clock = pygame.time.Clock()
 running = True
-
+pygame.mixer.music.play(-1)
 while running:
     events = pygame.event.get()
     for event in events:
