@@ -18,13 +18,12 @@ class HomeScreen:
         for event in events:
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if self.play_button.isOver(pygame.mouse.get_pos()):
-                    print("Play button clicked!")
                     return Screens.PLACE_SHIPS_1.value
         return Screens.MENU.value
 
     def draw(self, surface):
         surface.blit(self.background, (0, 0))
-        self.play_button.draw(surface)
+        self.play_button.draw(surface,Colors.WHITE.value)
 
     def update(self):
         pass

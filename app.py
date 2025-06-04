@@ -6,7 +6,12 @@ from screens.Menu import HomeScreen
 from Enums import Screens
 from Game import Game
 
+
 pygame.init()
+pygame.mixer.init()
+
+pygame.mixer.music.load("./assets/music.mp3")
+pygame.mixer.music.play(-1)
 screen_width = 1000
 screen_height = 600
 

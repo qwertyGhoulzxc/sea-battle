@@ -14,7 +14,7 @@ class Screens(Enum):
 	GAME = 'GAME'
 
 class Colors(Enum):
-	BLUE = (0, 0, 255)
+	BLUE = (34, 123, 240)
 	BLACK = (0, 0, 0)
 	WHITE = (255, 255, 255)
 	CORAL = (245, 122, 138)

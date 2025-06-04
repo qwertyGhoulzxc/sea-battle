@@ -2,10 +2,11 @@ import pygame
 from Enums import BoardState
 
 class Ship(pygame.sprite.Sprite):
-	def __init__(self, size):
+	def __init__(self, size,player_number):
 		super().__init__()
 		self.areaAroundShip = []
 		self.ship_coords = []
+		self.ship_coords_for_kill = []
 		self.board = None
 		self.boardField = None
 		self.size = size
@@ -14,6 +15,10 @@ class Ship(pygame.sprite.Sprite):
 		self.dragging = False
 		self.placed = False
 		self.initial_position = None
+
+		self.player_number = player_number
+		self.image = pygame.image.load(f"./assets/{size}_{"R" if self.player_number == 2 else "B"}.png").convert_alpha()
+		self.position_adjusted = False
 
 	def placeShip(self, board, _coords):
 		self.delete_ship_from_board(board)
@@ -24,7 +29,7 @@ class Ship(pygame.sprite.Sprite):
 			if self.boardField[y][x] != BoardState.NO_SHIP.value:
 				return False
 		self.ship_coords = coords
-
+		self.ship_coords_for_kill = coords.copy()
 		self.areaAroundShip = []
 		for x, y in self.ship_coords:
 			self.board.set_cell(x, y, BoardState.SHIP.value)
@@ -48,6 +53,7 @@ class Ship(pygame.sprite.Sprite):
 		self.boardField = dupl_board
 		self.areaAroundShip = []
 		self.ship_coords = []
+		self.ship_coords_for_kill = []
 		board.removeShip(self)
 
 
@@ -70,17 +76,15 @@ class Ship(pygame.sprite.Sprite):
 		if not self.ship_coords:
 			for x, y in self.areaAroundShip:
 				self.board.set_cell(x, y, BoardState.MISS.value)
-			self.board.removeShip(self)
+			self.board.removeShip(self,)
 
 	def is_on_position(self, x, y):
 		return [x, y] in self.ship_coords
 
-#FIXME
 	def rotateShip(self):
 		if not self.placed or not self.ship_coords:
 			return
 
-		# ❗️ Сохраняем копию ДО удаления
 		sorted_ship_coord = sorted(self.ship_coords.copy(), key=lambda item: item[0])
 		start_x, start_y = sorted_ship_coord[0]
 		new_coords = []
@@ -88,7 +92,6 @@ class Ship(pygame.sprite.Sprite):
 		tries = 0
 		max_tries = 2
 
-		# Удалить с доски ПОСЛЕ сохранения координат
 		self.delete_ship_from_board(self.board)
 		_horizontal = not self.horizontal
 
@@ -125,21 +128,18 @@ class Ship(pygame.sprite.Sprite):
 			new_coords = sorted_ship_coord
 
 		self.placeShip(self.board, new_coords)
-		print('++++ baord+++++')
-		print(new_coords)
 
-		self.board.printBoard()
 
 	def draw_ship(self, surface, x, y, color=(100, 100, 100), cell_size=35):
 		vertical = not self.horizontal
 		width = cell_size if vertical else cell_size * self.size
 		height = cell_size * self.size if vertical else cell_size
 		self.rect = pygame.Rect(x, y, width, height)
-		pygame.draw.rect(surface, color, self.rect, border_radius=8)
-		pygame.draw.rect(surface, (0, 0, 0), self.rect, 2, border_radius=8)
-		for i in range(1, self.size):
-			if vertical:
-				pygame.draw.line(surface, (0, 0, 0), (x, y + i * cell_size), (x + cell_size, y + i * cell_size), 2)
-			else:
-				pygame.draw.line(surface, (0, 0, 0), (x + i * cell_size, y), (x + i * cell_size, y + cell_size), 2)
 
+
+		image = pygame.transform.scale(self.image, (width, height))
+		if vertical and self.size != 1:
+			image = pygame.transform.rotate(image, -90)
+			image = pygame.transform.scale(image, (width, height))
+
+		surface.blit(image, (x, y))
