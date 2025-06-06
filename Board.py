@@ -38,7 +38,6 @@ class Board(pygame.sprite.Sprite):
 		]
 
 	def _create_ships(self):
-		print(self.player_number)
 		sizes = [4] + [3]*2 + [2]*3 + [1]*4
 		ships = [Ship(size,self.player_number) for size in sizes]
 		self.__layout_ships(ships)
